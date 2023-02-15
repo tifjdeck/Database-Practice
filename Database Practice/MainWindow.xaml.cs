@@ -22,15 +22,16 @@ namespace Database_Practice
     /// </summary>
     public partial class MainWindow : Window
     {
+        private OleDbConnection cn;
+
         public MainWindow()
         {
             InitializeComponent();
-            GCNotificationStatus = new OleDbConnection(Provider = Microsoft.ACE.OLEDB.12.0; Data Source =| DataDirectory |\Database_TD.accdb);
+            cn = new OleDbConnection("Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\\Users\\tiffa\\Downloads\\Database_TD.accdb");
         }
 
         private void Assetbutton_Click(object sender, RoutedEventArgs e)
         {
-            OleDbConnection cn;
             string query = "select * from Assets";
             OleDbCommand cmd = new OleDbCommand(query, cn);
             cn.Open();
@@ -39,9 +40,30 @@ namespace Database_Practice
             string data = "";
 
             while (read.Read())
-            {
-                data += read[0].ToString() + "\n";
+            {   
+                data += read[0].ToString().PadRight(10) + read[1].ToString().PadRight(10) + read[2].ToString().PadRight(10) + read[3].ToString().PadRight(10) + "\n";
             }
+            cn.Close();
+
+            MainTextBox.Text = data;
+        }
+
+        private void Employeebutton_Click(object sender, RoutedEventArgs e)
+        {
+            string query = "select * from Employees";
+            OleDbCommand cmd = new OleDbCommand(query, cn);
+            cn.Open();
+            OleDbDataReader read = cmd.ExecuteReader();
+
+            string data = "";
+
+            while (read.Read())
+            {
+                data += read[0].ToString().PadRight(10) + ' ' + read[1].ToString().PadRight(10) + ' ' + read[2].ToString() + "\n";
+            }
+            cn.Close();
+
+            MainTextBox.Text = data;
         }
     }
 }
